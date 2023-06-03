@@ -47,7 +47,7 @@ public class DemoSecondApplicationTests2 {
             // 记录error级别的信息
         }else{
             System.out.println(i);
-            // 记录info级别的信息
+            //  记录info级别的信息
             log.info(">>insert项目插入测试成功");
         }
     }
