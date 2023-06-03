@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--    as 后边的名称对应Entity类属性名，as前名称对应数据库列名；标签id对应mapper接口属性名-->
+<mapper namespace="com.example.demosecond.dao.ProjectEntityMapper">
+<!--    查找所有项目信息-->
+  <select id="queryProjectList" parameterType="java.lang.String" resultType="com.example.demosecond.dao.entity.ProjectEntity">
+    SELECT id, user_id, project_name as "projectName", CREATION_DATE as "creationDate", created_by as "createdBy", PROJECT_CONTENT as "projectContent"
+    FROM project_info
+    ORDER BY id
+  </select>
+
+  <!--根据项目名查找项目信息-->
+  <select id="selectProjectInfo" parameterType="java.lang.String" resultType="com.example.demosecond.dao.entity.ProjectEntity">
+    SELECT id, user_id, project_name as "projectName", CREATION_DATE as "creationDate", created_by as "createdBy", PROJECT_CONTENT as "projectContent"
+    FROM project_info
+    WHERE PROJECT_NAME = #{projectName,jdbcType=VARCHAR}
+    ORDER BY id
+  </select>
+
+  <!--根据ID查找项目信息-->
+  <select id="selectProjectById" parameterType="java.lang.String" resultType="com.example.demosecond.dao.entity.ProjectEntity">
+    SELECT id,`user_id`, project_name as "projectName", CREATION_DATE as "creationDate", created_by as "createdBy", PROJECT_CONTENT as "projectContent"
+    FROM project_info
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+
+<!--  根据id删除-->
+  <delete id="deleteProjectById" parameterType="com.example.demosecond.dao.entity.ProjectEntity">
+    delete from project_info
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+
+<!--  新增-->
+  <insert id="insert" parameterType="com.example.demosecond.dao.entity.ProjectEntity">
+    insert into project_info (id, user_id, PROJECT_NAME,
+    PROJECT_CONTENT, created_by, creation_date,
+    last_updated_by, last_update_date)
+    values (#{id,jdbcType=VARCHAR}, #{userId,jdbcType=VARCHAR}, #{projectName,jdbcType=VARCHAR},
+    #{projectContent,jdbcType=VARCHAR},#{createdBy,jdbcType=VARCHAR}, #{creationDate,jdbcType=TIMESTAMP},
+    #{lastUpdatedBy,jdbcType=VARCHAR}, #{lastUpdateDate,jdbcType=TIMESTAMP})
+  </insert>
+
+<!--  更新-->
+  <update id="updateByPrimaryKeySelective" parameterType="com.example.demosecond.dao.entity.ProjectEntity">
+    update project_info
+    set USER_ID = #{userId,jdbcType=VARCHAR},
+    PROJECT_NAME = #{projectName,jdbcType=VARCHAR},
+    PROJECT_CONTENT = #{projectContent,jdbcType=VARCHAR},
+    created_by = #{createdBy,jdbcType=VARCHAR},
+    creation_date = #{creationDate,jdbcType=TIMESTAMP},
+    last_updated_by = #{lastUpdatedBy,jdbcType=VARCHAR},
+    last_update_date = #{lastUpdateDate,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

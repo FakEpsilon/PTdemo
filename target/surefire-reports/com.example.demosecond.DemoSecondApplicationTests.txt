@@ -1,0 +1,17 @@
+-------------------------------------------------------------------------------
+Test set: com.example.demosecond.DemoSecondApplicationTests
+-------------------------------------------------------------------------------
+Tests run: 2, Failures: 0, Errors: 1, Skipped: 0, Time elapsed: 52.229 s <<< FAILURE! - in com.example.demosecond.DemoSecondApplicationTests
+deleteUserById  Time elapsed: 50.63 s  <<< ERROR!
+org.apache.ibatis.exceptions.PersistenceException: 
+
+### Error updating database.  Cause: com.mysql.cj.jdbc.exceptions.MySQLTransactionRollbackException: Lock wait timeout exceeded; try restarting transaction
+### The error may exist in mapper/UserEntityMapper.xml
+### The error may involve com.example.demosecond.dao.UserEntityMapper.deleteUserById-Inline
+### The error occurred while setting parameters
+### SQL: delete from user_info     where id = ?
+### Cause: com.mysql.cj.jdbc.exceptions.MySQLTransactionRollbackException: Lock wait timeout exceeded; try restarting transaction
+	at com.example.demosecond.DemoSecondApplicationTests.deleteUserById(DemoSecondApplicationTests.java:105)
+Caused by: com.mysql.cj.jdbc.exceptions.MySQLTransactionRollbackException: Lock wait timeout exceeded; try restarting transaction
+	at com.example.demosecond.DemoSecondApplicationTests.deleteUserById(DemoSecondApplicationTests.java:105)
+
