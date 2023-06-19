@@ -1,13 +1,17 @@
 onload = () => {
   $('#headerUsername').text($util.getItem('userInfo').username)
   handleHeaderLoad()
+  projectList = []
   fetchProjectList()
 }
 
 let projectList = []
 
+
 const fetchProjectList = () => {
+  let idName = { }
   let params = {
+    userId: $util.getItem('userInfo')[0].id,
     createdBy: $util.getItem('userInfo')[0].username,
     projectName: $('#projectName').val()
   }
@@ -18,18 +22,21 @@ const fetchProjectList = () => {
       data: JSON.stringify(params),
       dataType: "json",
       contentType: "application/json",
-      success(res) {
-        projectList = res.data
+      success(res){
         console.log(res.data)
         $('#content').html('')
 
         res.data.map(item => {
+          projectList.push(item)
+          idName["idd"] = item.id
+          idName["namee"]= item.projectName
+          let tmp = encodeURIComponent(JSON.stringify(idName))
           $('#content').append(`
           <div class="list">
             <div class="list-header">
               <div>${item.projectName}</div>
               <div>
-                <button type="button" class="btn btn-link" onclick="onCreateQuestionnaire()">创建问卷</button>
+                <button type="button" class="btn btn-link" onclick="onCreateQuestionnaire('${tmp}')">创建问卷</button>
                 <button type="button" class="btn btn-link" onclick="onSeeProject('${item.id}')">查看</button>
                 <button type="button" class="btn btn-link" onclick="onEditProject('${item.id}')">编辑</button>
                 <button type="button" class="btn btn-link" onclick="onDelProject('${item.id}')">删除</button>
@@ -50,18 +57,21 @@ const fetchProjectList = () => {
       data: JSON.stringify(params),
       dataType: "json",
       contentType: "application/json",
-      success(res) {
-        projectList = res.data
+      success(res){
         console.log(res.data)
         $('#content').html('')
 
         res.data.map(item => {
+          projectList.push(item)
+          idName["idd"] = item.id
+          idName["namee"]= item.projectName
+          let tmp = encodeURIComponent(JSON.stringify(idName))
           $('#content').append(`
           <div class="list">
             <div class="list-header">
               <div>${item.projectName}</div>
               <div>
-                <button type="button" class="btn btn-link" onclick="onCreateQuestionnaire()">创建问卷</button>
+                <button type="button" class="btn btn-link" onclick="onCreateQuestionnaire('${tmp}')">创建问卷</button>
                 <button type="button" class="btn btn-link" onclick="onSeeProject('${item.id}')">查看</button>
                 <button type="button" class="btn btn-link" onclick="onEditProject('${item.id}')">编辑</button>
                 <button type="button" class="btn btn-link" onclick="onDelProject('${item.id}')">删除</button>
@@ -83,7 +93,8 @@ const onCreatePrject = () => {
   location.href = "/pages/createProject/index.html"
 }
 
-const onCreateQuestionnaire = () => {
+const onCreateQuestionnaire = (projectItem) => {
+  $util.setPageParam('createQuestionnaire', projectItem)//projectItem存id和name
   location.href = "/pages/createQuestionnaire/index.html"
 }
 
@@ -105,6 +116,7 @@ const onDelProject = (id) => {
 
   if (state) {
     let params = {
+      userId: $util.getItem('userInfo')[0].id,
       id:id
     }
 
@@ -119,6 +131,7 @@ const onDelProject = (id) => {
       success(res) {
         console.log(res)
         alert(res.message)
+        projectList = []
         fetchProjectList()
       }
     })

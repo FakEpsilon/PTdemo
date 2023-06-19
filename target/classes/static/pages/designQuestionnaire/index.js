@@ -1,5 +1,12 @@
+onload=()=>{
 let questionnaireTitle = '问卷标题'
 let questionnaireDescription = '问卷说明'
+let idNameDescription = JSON.parse(decodeURIComponent($util.getPageParam('designQuestionnaire')))
+questionnaireTitle = idNameDescription.name
+questionnaireDescription = idNameDescription.description
+$('#questionnaireTitle').text(questionnaireTitle)
+$('#questionnaireDescription').text(questionnaireDescription)
+}
 const problem = []
 
 /**
@@ -29,7 +36,7 @@ const onAddQuestion = (type) => {
       break;
   }
   $('#problem').append(ele)
-  problem.push({ problemName: '', mustAnswer: true, option: [{}] })
+  problem.push({problemType: type, problemName: '', mustAnswer: true, option: [{}] })
 
   $(".question").hover(() => {
     let problemIndex = $('.question:hover').attr('data-problemIndex')
@@ -60,6 +67,7 @@ const onMustAnswerClick = (problemIndex) => {
   problem[problemIndex].mustAnswer = !problem[problemIndex].mustAnswer
   if (problem[problemIndex].mustAnswer) $(`#question${problemIndex} #mustAnswer`).text('必答题')
   else $(`#question${problemIndex} #mustAnswer`).text('非必答题')
+  console.log(problem[problemIndex].mustAnswer)
 }
 
 const cancelEdit = (problemIndex) => {
@@ -70,6 +78,8 @@ const cancelEdit = (problemIndex) => {
 const handleMoveUp = (problemIndex) => {
   if (problemIndex === 0) return
   $(`#question${problemIndex - 1}`).before($(`#question${problemIndex}`))
+  $(`#question${problemIndex} #questionTitle`).text(`${problemIndex}.${problem[problemIndex].problemName}`)
+  $(`#question${problemIndex - 1} #questionTitle`).text(`${problemIndex + 1}.${problem[problemIndex-1].problemName}`)
   let i = problem[problemIndex]
   problem[problemIndex] = problem[problemIndex - 1]
   problem[problemIndex - 1] = i
@@ -79,6 +89,8 @@ const handleMoveUp = (problemIndex) => {
 const handleMoveDown = (problemIndex) => {
   if (problemIndex === problem.length - 1) return
   $(`#question${problemIndex + 1}`).after($(`#question${problemIndex}`))
+  $(`#question${problemIndex + 1} #questionTitle`).text(`${problemIndex + 1}.${problem[problemIndex+1].problemName}`)
+  $(`#question${problemIndex} #questionTitle`).text(`${problemIndex + 2}.${problem[problemIndex].problemName}`)
   let i = problem[problemIndex]
   problem[problemIndex] = problem[problemIndex + 1]
   problem[problemIndex + 1] = i
@@ -212,17 +224,18 @@ const singleChoiceDelOption = (problemIndex, optionIndex) => {
 const singleChoiceEditFinish = (problemIndex) => {
   $(`#question${problemIndex} .bottom`).css('display', 'none')
   $(`#question${problemIndex} .bottom2`).css('display', 'inline')
-  $(`#question${problemIndex} #questionTitle`).text(`${problemIndex + 1}.${problem[problemIndex].problemName}`)
-  $(`#question${problemIndex} .bottom2`).html('')
-  problem[problemIndex].option.map(item => {
+  $(`#question${problemIndex} #questionTitle`).text(`${problemIndex + 1}.${problem[problemIndex].problemName}`)//题号和题目
+  $(`#question${problemIndex} .bottom2`).html('')//先对HTML清零
+  problem[problemIndex].option.map(item => {//遍历选项
     $(`#question${problemIndex} .bottom2`).append(`
       <div style="display: flex; align-items: center;">
         <label class="radio-inline">
-          <input type="radio">${item.chooseTerm ? item.chooseTerm : ''}
+          <input type="radio" name="${problemIndex}">${item.chooseTerm ? item.chooseTerm : ''}
         </label>
       </div>
     `)
   })
+  console.log(problem)
 }
 
 const handleAddMultipleChoice = () => {
@@ -241,11 +254,11 @@ const handleAddMultipleChoice = () => {
           </div>
         </div>
         <div>
-          <button type="button" class="btn btn-link btn-add-option" onClick="multipleChoiceAddOption(${problem.length})">添加选项</button>
+          <button type="button" class="btn btn-link btn-add-option" onclick="multipleChoiceAddOption(${problem.length})">添加选项</button>
         </div>
         <div class="btn-group">
           <button type="button" id="cancelEdit" class="btn btn-default" onclick="cancelEdit(${problem.length})">取消编辑</button>
-          <button type="button" id="editFinish" class="btn btn-default" onClick="multipleChoiceEditFinish(${problem.length})">完成编辑</button>
+          <button type="button" id="editFinish" class="btn btn-default" onclick="multipleChoiceEditFinish(${problem.length})">完成编辑</button>
         </div>
       </div>
       <div class="bottom2" style="display: none;">
@@ -279,6 +292,7 @@ const multipleChoiceEditFinish = (problemIndex) => {
   $(`#question${problemIndex} .bottom2`).css('display', 'inline')
   $(`#question${problemIndex} #questionTitle`).text(`${problemIndex + 1}.${problem[problemIndex].problemName}`)
   $(`#question${problemIndex} .bottom2`).html('')
+  // console.log(problem[problemIndex].option)
   problem[problemIndex].option.map(item => {
     $(`#question${problemIndex} .bottom2`).append(`
       <div style="display: flex; align-items: center;">
@@ -288,6 +302,7 @@ const multipleChoiceEditFinish = (problemIndex) => {
       </div>
     `)
   })
+  // console.log(problem)
 }
 
 const handleAddFillBlanks = () => {
@@ -301,7 +316,7 @@ const handleAddFillBlanks = () => {
         <textarea class="form-control textarea" id="problemName" placeholder="请输入题目" rows="4" oninput="onInput(${problem.length}, ${undefined}, 'problemName')"></textarea>
         <div class="btn-group">
           <button type="button" id="cancelEdit" class="btn btn-default" onclick="cancelEdit(${problem.length})">取消编辑</button>
-          <button type="button" id="editFinish" class="btn btn-default" onClick="fillBlanksEditFinish(${problem.length})">完成编辑</button>
+          <button type="button" id="editFinish" class="btn btn-default" onclick="fillBlanksEditFinish(${problem.length})">完成编辑</button>
         </div>
       </div>
       <div class="bottom2" style="display: none;">
@@ -319,6 +334,7 @@ const fillBlanksEditFinish = (problemIndex) => {
   $(`#question${problemIndex} .bottom2`).html(`
     <div style="border: 1px solid #CCCCCC; width: 50%; height: 70px;"></div>
   `)
+  // console.log(problem)
 }
 
 const handleAddMatrix = () => {
@@ -339,11 +355,11 @@ const handleAddMatrix = () => {
           </div>
         </div>
         <div>
-          <button type="button" class="btn btn-link btn-add-option" onClick="matrixAddOption(${problem.length})">添加选项</button>
+          <button type="button" class="btn btn-link btn-add-option" onclick="matrixAddOption(${problem.length})">添加选项</button>
         </div>
         <div class="btn-group">
           <button type="button" id="cancelEdit" class="btn btn-default" onclick="cancelEdit(${problem.length})">取消编辑</button>
-          <button type="button" id="editFinish" class="btn btn-default" onClick="matrixEditFinish(${problem.length})">完成编辑</button>
+          <button type="button" id="editFinish" class="btn btn-default" onclick="matrixEditFinish(${problem.length})">完成编辑</button>
         </div>
       </div>
       <div class="bottom2" style="display: none; padding-left: 80px;"></div>
@@ -371,6 +387,7 @@ const matrixDelOption = (problemIndex, optionIndex) => {
 }
 
 const matrixEditFinish = (problemIndex) => {
+  // console.log(problem)
   $(`#question${problemIndex} .bottom`).css('display', 'none')
   $(`#question${problemIndex} .bottom2`).css('display', 'inline')
   $(`#question${problemIndex} #questionTitle`).text(`${problemIndex + 1}.${problem[problemIndex].problemName}`)
@@ -407,7 +424,7 @@ const matrixEditFinish = (problemIndex) => {
       <th>${item.chooseTerm}</th>
     `)
   })
-  
+  // console.log(problem)
 }
 
 const handleAddGauge = () => {
@@ -432,11 +449,11 @@ const handleAddGauge = () => {
           </div>
         </div>
         <div>
-          <button type="button" class="btn btn-link btn-add-option" onClick="gaugeAddOption(${problem.length})">添加选项</button>
+          <button type="button" class="btn btn-link btn-add-option" onclick="gaugeAddOption(${problem.length})">添加选项</button>
         </div>
         <div class="btn-group">
           <button type="button" id="cancelEdit" class="btn btn-default" onclick="cancelEdit(${problem.length})">取消编辑</button>
-          <button type="button" id="editFinish" class="btn btn-default" onClick="gaugeEditFinish(${problem.length})">完成编辑</button>
+          <button type="button" id="editFinish" class="btn btn-default" onclick="gaugeEditFinish(${problem.length})">完成编辑</button>
         </div>
       </div>
       <div class="bottom2" style="display: none; align-items: center; justify-content: space-between;"></div>
@@ -484,6 +501,7 @@ const gaugeEditFinish = (problemIndex) => {
   $(`#question${problemIndex} .bottom2`).append(`
     <div>${problem[problemIndex].option[problem[problemIndex].option.length - 1].chooseTerm}</div>
   `)
+  // console.log(problem)
 }
 
 const handleModifyTitle = () => {
@@ -492,17 +510,72 @@ const handleModifyTitle = () => {
   $('#questionnaireDescription').val(questionnaireDescription)
 }
 
-
 const handleEditFinish = () => {
-  let params = {}
-  $.ajax({
-    url: API_BASE_URL + '/modifyQuestionnaire',
-    type: "POST",
-    data: JSON.stringify(params),
-    dataType: "json",
-    contentType: "application/jsoresn",
-    success(res) {
-      console.log(res)
+  let idNameDescription = JSON.parse(decodeURIComponent($util.getPageParam('designQuestionnaire')))//先获取当前项目id
+  let currentPid = idNameDescription.quesId
+  problem.map((item, index) => {
+    let params = {
+      questionnaireId: currentPid,
+      questionName: item.problemName,
+      questionType: item.problemType,
+      questionSequence: index+1,
+      questionDescription: item.leftTitle
+    }
+    if (item.mustAnswer) {
+      params.questionMa = 1
+    } else {
+      params.questionMa = 0
+    }
+    let currentQid;
+    $.ajax({
+      url: API_BASE_URL + '/addQuestionInfo',
+      type: "POST",
+      data: JSON.stringify(params),
+      dataType: "json",
+      contentType: "application/json",
+      success(res) {
+        currentQid = res.id
+        // Call the function with the currentQid as the argument
+        if(item.option[0].chooseTerm !== undefined){
+          processOptionInfo(item.option, currentQid)
+          console.log(currentQid)
+        }
+        // console.log("第" + index + "个问题创建编辑成功")
+      },
+      error(res) {
+        alert("阿偶，出现了点问题呢！")
+      }
+    })
+    // Function to process option info
+    function processOptionInfo(options, qid) {
+      console.log(options.length)
+      console.log(options)
+      let success = options.length
+      options.map((item, index) => {
+        let paramss = {
+          questionId: qid,
+          optionName: item.chooseTerm,
+          optionFraction: item.fraction,
+          optionSequence: index+1,
+        }
+        $.ajax({
+          url: API_BASE_URL + '/addOptionInfo',
+          type: "POST",
+          data: JSON.stringify(paramss),
+          dataType: "json",
+          contentType: "application/json",
+          success(res) {
+            success -= 1
+            // console.log(res)
+          },
+          error(res) {
+            alert("阿偶，出现了点问题呢！")
+          }
+        })
+      })
     }
   })
+
+  // alert("创建成功！")
+  // location.href = '../questionnaire/index.html'
 }

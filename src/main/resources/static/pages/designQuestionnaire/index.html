@@ -9,8 +9,10 @@
   <link rel="stylesheet" href="./index.css">
   <link rel="stylesheet" href="../../static/bootstrap-3.4.1/css/bootstrap.min.css">
   <link rel="stylesheet" href="../../static/iconfont/iconfont.css">
+  <script type="module" src="../../utils/index.js"></script>
   <script src="../../static/jquery-3.5.1/jquery-3.5.1.min.js"></script>
   <script src="../../static/bootstrap-3.4.1/js/bootstrap.min.js"></script>
+  <script src="../editProject/index.js"></script>
 </head>
 <body>
   <div class="header">
@@ -45,12 +47,12 @@
       </div>
     </div>
     <div class="questionnaire-title">
-      <span onclick="handleModifyTitle()" style="cursor: pointer;">
+      <span onclick="handleModifyTitle()" style="cursor: pointer;" id="questionnaireTitle">
         问卷标题
       </span>
     </div>  
     <div class="questionnaire-description">
-      <span onclick="handleModifyTitle()" style="cursor: pointer;">
+      <span onclick="handleModifyTitle()" style="cursor: pointer;" id="questionnaireDescription">
         问卷说明
       </span>
     </div>
@@ -60,9 +62,9 @@
   <!-- 修改标题弹窗 -->
   <div id="modifyTitle"></div>
 
-  <script type="module" src="../../utils/index.js"></script>
   <script src="./modules/modifyTitleModal/index.js"></script>
   <script src="./index.js"></script>
+  <script src="../../my-config.js"></script>
   <script>
     $("#modifyTitle").load("./modules/modifyTitleModal/index.html")
   </script>

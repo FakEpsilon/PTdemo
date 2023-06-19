@@ -4,6 +4,7 @@ import com.example.demosecond.beans.HttpResponseEntity;
 import com.example.demosecond.dao.entity.UserEntity;
 import com.example.demosecond.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,6 +20,7 @@ public class UserController {
     private UserService userService;
 
     /* 用户登录 */
+    @Cacheable(value = "userLogin")
     @RequestMapping(value = "/userLogin", method = RequestMethod.POST, headers = "Accept=application/json")
     public HttpResponseEntity userLogin(@RequestBody UserEntity userEntity){
         HttpResponseEntity httpResponseEntity = new HttpResponseEntity();
@@ -43,6 +45,7 @@ public class UserController {
     }
 
     /* 用户列表查询 */
+    @Cacheable(value = "userList")
     @RequestMapping(value = "/queryUserList", method = RequestMethod.POST, headers = "Accept=application/json")
     public HttpResponseEntity queryUserList(@RequestBody UserEntity userEntity){
         HttpResponseEntity httpResponseEntity = new HttpResponseEntity();

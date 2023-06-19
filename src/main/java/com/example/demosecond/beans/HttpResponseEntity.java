@@ -1,9 +1,12 @@
 package com.example.demosecond.beans;
 
-public class HttpResponseEntity {
+import java.io.Serializable;
+
+public class HttpResponseEntity implements Serializable {
     private String code;
     private Object data;
     private String message;
+    private String id;
 
     public String getCode() {
         return code;
@@ -27,5 +30,13 @@ public class HttpResponseEntity {
 
     public void setMessage(String message) {
         this.message = message;
+    }
+
+    public String getID() {
+        return id;
+    }
+
+    public void setID(String id) {
+        this.id = id;
     }
 }

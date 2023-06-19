@@ -4,6 +4,9 @@ import com.example.demosecond.beans.HttpResponseEntity;
 import com.example.demosecond.dao.entity.ProjectEntity;
 import com.example.demosecond.service.ProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,6 +22,7 @@ public class ProjectController {
     private ProjectService projectService;
 
     /* 项目列表查询 */
+    @Cacheable(value = "project", key = "#projectEntity.userId")
     @RequestMapping(value = "/queryProjectList", method = RequestMethod.POST, headers = "Accept=application/json")
     public HttpResponseEntity queryProjectList(@RequestBody ProjectEntity projectEntity){
         HttpResponseEntity httpResponseEntity = new HttpResponseEntity();
@@ -43,6 +47,7 @@ public class ProjectController {
     }
 
     /* 项目名字单查 */
+    @Cacheable(value = "projectInfoViaName")
     @RequestMapping(value = "/selectProjectInfo", method = RequestMethod.POST, headers = "Accept=application/json")
     public HttpResponseEntity selectProjectInfo(@RequestBody ProjectEntity projectEntity){
         HttpResponseEntity httpResponseEntity = new HttpResponseEntity();
@@ -67,6 +72,7 @@ public class ProjectController {
     }
 
     /* 项目ID查询 */
+    @Cacheable(value = "projectViaId")
     @RequestMapping(value = "/selectProjectById", method = RequestMethod.POST, headers = "Accept=application/json")
     public HttpResponseEntity selectProjectById(@RequestBody ProjectEntity projectEntity){
         HttpResponseEntity httpResponseEntity = new HttpResponseEntity();
@@ -92,6 +98,7 @@ public class ProjectController {
 
 
     /* 项目添加 */
+    @Cacheable(value = "project", key = "#projectEntity.userId")
     @RequestMapping(value = "/addProjectInfo", method = RequestMethod.POST, headers = "Accept=application/json")
     public HttpResponseEntity addProjectInfo(@RequestBody ProjectEntity projectEntity){
         HttpResponseEntity httpResponseEntity = new HttpResponseEntity();
@@ -114,7 +121,7 @@ public class ProjectController {
         }
         return httpResponseEntity;
     }
-    /* modifyProjectInfo用户修改 */
+    /* modifyProjectInfo修改 */
     @RequestMapping(value = "/modifyProjectInfo", method = RequestMethod.POST, headers = "Accept=application/json")
     public HttpResponseEntity modifyProjectInfo(@RequestBody ProjectEntity projectEntity){
         HttpResponseEntity httpResponseEntity = new HttpResponseEntity();
@@ -138,7 +145,8 @@ public class ProjectController {
         return httpResponseEntity;
     }
 
-    /* deleteProjectById用户删除 */
+    /* deleteProjectById删除 */
+    @CacheEvict(value = "project", key = "#projectEntity.userId")
     @RequestMapping(value = "/deleteProjectByID", method = RequestMethod.POST, headers = "Accept=application/json")
     public HttpResponseEntity deleteProjectById(@RequestBody ProjectEntity projectEntity){
         HttpResponseEntity httpResponseEntity = new HttpResponseEntity();

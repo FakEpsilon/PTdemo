@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--    as 后边的名称对应Entity类属性名，as前名称对应数据库列名；标签id对应mapper接口属性名-->
+<mapper namespace="com.example.demosecond.dao.OptionEntityMapper">
+	<!--新增问题-->
+	<insert id="insert" parameterType="com.example.demosecond.dao.entity.OptionEntity">
+		insert into option_info (id, QUESTION_ID, OPTION_NAME, OPTION_FRACTION, OPTION_SEQUENCE)
+		values (#{id,jdbcType=VARCHAR}, #{questionId,jdbcType=VARCHAR}, #{optionName,jdbcType=VARCHAR},
+		#{optionFraction,jdbcType=VARCHAR}, #{optionSequence,jdbcType=INTEGER})
+	</insert>
+
+	<!--	根据问题ID查询选项列表-->
+	<select id="queryOptionById" parameterType="java.lang.String" resultType="com.example.demosecond.dao.entity.OptionEntity">
+		select id, OPTION_NAME as "optionName", OPTION_FRACTION as "optionFraction"
+		from option_info
+		where QUESTION_ID = #{questionId,jdbcType=VARCHAR}
+		order by OPTION_SEQUENCE
+	</select>
+</mapper>

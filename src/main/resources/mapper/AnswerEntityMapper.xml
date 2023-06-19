@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--    as 后边的名称对应Entity类属性名，as前名称对应数据库列名；标签id对应mapper接口属性名-->
+<mapper namespace="com.example.demosecond.dao.AnswerEntityMapper">
+<!--	插入答案-->
+	<insert id="insert" parameterType="com.example.demosecond.dao.entity.AnswerEntity">
+		insert into answer_info (ID, QUESTION_ID, SINGLE_OPTION, MULTIPLE_OPTION, FILL_OPTION)
+		values (#{id,jdbcType=VARCHAR},#{questionId,jdbcType=VARCHAR},#{singleOption,jdbcType=VARCHAR},
+		#{multipleOption,jdbcType=VARCHAR},#{fillOption,jdbcType=VARCHAR})
+	</insert>
+
+
+<!--	查找答案-->
+	<select id="queryAnswer" parameterType="java.lang.String" resultType="com.example.demosecond.dao.entity.AnswerEntity">
+		select id, SINGLE_OPTION as "singleOption", MULTIPLE_OPTION as "multipleOption", FILL_OPTION as "fillOption"
+		from answer_info
+		where QUESTION_ID = #{questionId,jdbcType=VARCHAR}
+	</select>
+
+</mapper>
