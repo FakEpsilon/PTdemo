@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--    as 后边的名称对应Entity类属性名，as前名称对应数据库列名；标签id对应mapper接口属性名-->
+<mapper namespace="com.example.demosecond.dao.QuestionnaireEntityMapper">
+<!--	查询所有问卷信息-->
+	<select id="queryQuestionnaireList" parameterType="java.lang.String" resultType="com.example.demosecond.dao.entity.QuestionnaireEntity">
+		SELECT id, QUESTIONNAIRE_NAME as "questionnaireName", CREATION_DATE as "creationDate"
+		FROM questionnaire_info
+		ORDER BY id
+	</select>
+
+<!--	根据项目ID查询问卷信息-->
+	<select id="selectQuestionnaireById" parameterType="java.lang.String" resultType="com.example.demosecond.dao.entity.QuestionnaireEntity">
+		SELECT id, QUESTIONNAIRE_NAME as "questionnaireName", FLAG as "flag", ISSUE_DATE as "issueDate", QUESTIONNAIRE_DESCRIPTION as "questionnaireDescription"
+		FROM questionnaire_info
+		WHERE PROJECT_ID = #{projectId,jdbcType=VARCHAR}
+	</select>
+
+	<!--	根据问卷ID查询问卷信息-->
+	<select id="selectQuestionnaireInfo" parameterType="java.lang.String" resultType="com.example.demosecond.dao.entity.QuestionnaireEntity">
+		SELECT QUESTIONNAIRE_NAME as "questionnaireName", FLAG as "flag", ISSUE_DATE as "issueDate"
+		FROM questionnaire_info
+		WHERE id = #{id,jdbcType=VARCHAR}
+	</select>
+
+<!-- 根据ID删除-->
+	<delete id="deleteQuestionnaireById" parameterType="com.example.demosecond.dao.entity.QuestionnaireEntity" >
+		delete from questionnaire_info
+		WHERE id = #{id,jdbcType=VARCHAR}
+	</delete>
+
+<!--	新增-->
+	<insert id="insert" parameterType="com.example.demosecond.dao.entity.QuestionnaireEntity" >
+		insert into questionnaire_info (id, USER_ID, PROJECT_ID, QUESTIONNAIRE_NAME, QUESTIONNAIRE_DESCRIPTION, START_TIME, STOP_TIME,
+		CREATED_BY, CREATION_DATE, LAST_UPDATED_BY, LAST_UPDATE_DATE, FLAG, ISSUE_DATE, ORIENTED_WHO)
+		values (#{id,jdbcType=VARCHAR}, #{userId,jdbcType=VARCHAR}, #{projectId,jdbcType=VARCHAR},
+		#{questionnaireName,jdbcType=VARCHAR}, #{questionnaireDescription,jdbcType=VARCHAR},
+		#{startTime,jdbcType=TIMESTAMP}, #{stopTime,jdbcType=TIMESTAMP}, #{createdBy,jdbcType=VARCHAR},
+		#{creationDate,jdbcType=TIMESTAMP}, #{lastUpdatedBy,jdbcType=VARCHAR}, #{lastUpdateDate,jdbcType=TIMESTAMP},
+		#{flag,jdbcType=VARCHAR}, #{issueDate,jdbcType=TIMESTAMP}, #{orientedWho,jdbcType=VARCHAR})
+	</insert>
+
+<!--	更新-->
+	<update id="updateByPrimaryKeySelective" parameterType="com.example.demosecond.dao.entity.QuestionnaireEntity">
+		UPDATE questionnaire_info
+		<set>
+			<if test="userId != null">USER_ID = #{userId,jdbcType=VARCHAR},</if>
+			<if test="projectId != null">PROJECT_ID = #{projectId,jdbcType=VARCHAR},</if>
+			<if test="questionnaireName != null">QUESTIONNAIRE_NAME = #{questionnaireName,jdbcType=VARCHAR},</if>
+			<if test="questionnaireDescription != null">QUESTIONNAIRE_DESCRIPTION = #{questionnaireDescription,jdbcType=VARCHAR},</if>
+			<if test="startTime != null">START_TIME = #{startTime,jdbcType=TIMESTAMP},</if>
+			<if test="stopTime != null">STOP_TIME = #{stopTime,jdbcType=TIMESTAMP},</if>
+			<if test="createdBy != null">CREATED_BY = #{createdBy,jdbcType=VARCHAR},</if>
+			<if test="creationDate != null">CREATION_DATE = #{creationDate,jdbcType=TIMESTAMP},</if>
+			<if test="lastUpdatedBy != null">LAST_UPDATED_BY = #{lastUpdatedBy,jdbcType=VARCHAR},</if>
+			<if test="lastUpdateDate != null">LAST_UPDATE_DATE = #{lastUpdateDate,jdbcType=TIMESTAMP},</if>
+			<if test="flag != null">FLAG = #{flag,jdbcType=VARCHAR},</if>
+			<if test="issueDate != null">ISSUE_DATE = #{issueDate,jdbcType=TIMESTAMP},</if>
+			<if test="orientedWho != null">ORIENTED_WHO = #{orientedWho,jdbcType=VARCHAR},</if>
+		</set>
+		WHERE id = #{id,jdbcType=VARCHAR}
+	</update>
+
+
+	<!--	发布问卷-->
+	<update id="issueQuestionnaireById" parameterType="com.example.demosecond.dao.entity.QuestionnaireEntity">
+		update questionnaire_info
+		set FLAG = 1, ISSUE_DATE = #{issueDate,jdbcType=TIMESTAMP}
+		where id = #{id,jdbcType=VARCHAR}
+	</update>
+
+	<!-- 关闭问卷-->
+	<update id="closeQuestionnaireById" parameterType="com.example.demosecond.dao.entity.QuestionnaireEntity">
+		update questionnaire_info
+		set FLAG = null
+		WHERE id = #{id,jdbcType=VARCHAR}
+	</update>
+</mapper>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--    as 后边的名称对应Entity类属性名，as前名称对应数据库列名；标签id对应mapper接口属性名-->
+<mapper namespace="com.example.demosecond.dao.QuestionEntityMapper">
+<!--新增问题-->
+	<insert id="insert" parameterType="com.example.demosecond.dao.entity.QuestionEntity">
+		insert into question_info (id, QUESTIONNAIRE_ID, QUESTION_TYPE, QUESTION_NAME, QUESTION_DESCRIPTION, QUESTION_MA, QUESTION_SEQUENCE)
+		values (#{id,jdbcType=VARCHAR}, #{questionnaireId,jdbcType=VARCHAR}, #{questionType,jdbcType=VARCHAR},#{questionName,jdbcType=VARCHAR},
+		#{questionDescription,jdbcType=VARCHAR}, #{questionMa,jdbcType=VARCHAR}, #{questionSequence,jdbcType=INTEGER})
+	</insert>
+
+<!--	根据问卷ID查询问题列表-->
+	<select id="queryQuestionById" parameterType="java.lang.String" resultType="com.example.demosecond.dao.entity.QuestionEntity">
+		select id, question_type as "questionType", question_name as "questionName", question_description as "questionDescription",
+		question_ma as "questionMa"
+		from question_info
+		where QUESTIONNAIRE_ID = #{questionnaireId,jdbcType=VARCHAR}
+		order by QUESTION_SEQUENCE
+	</select>
+</mapper>
