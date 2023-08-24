@@ -576,6 +576,6 @@ const handleEditFinish = () => {
     }
   })
 
-  // alert("创建成功！")
-  // location.href = '../questionnaire/index.html'
+  alert("创建成功！")
+  location.href = '../questionnaire/index.html'
 }

@@ -19,7 +19,7 @@ public class QuestionnaireService {
     private QuestionnaireEntityMapper questionnaireEntityMapper;
 
 //全查问卷列表
-    @Cacheable(value = "QuestionnaireList")
+    @CachePut(value = "QuestionnaireList")
     public List<QuestionnaireEntity> queryQuestionnaireList(QuestionnaireEntity questionnaireEntity){
         List<QuestionnaireEntity> result = questionnaireEntityMapper.queryQuestionnaireList(questionnaireEntity);
         return result;
@@ -34,7 +34,7 @@ public class QuestionnaireService {
 
     //    根据问卷ID查询问卷
     @Transactional
-    @Cacheable(value = "QuestionnaireViaId", key = "#questionnaireEntity.id")
+    @CachePut(value = "QuestionnaireViaId", key = "#questionnaireEntity.id")
     public List<QuestionnaireEntity> selectQuestionnaireInfo(QuestionnaireEntity questionnaireEntity){
         List<QuestionnaireEntity> result = questionnaireEntityMapper.selectQuestionnaireInfo(questionnaireEntity);
         return result;

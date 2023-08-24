@@ -13,7 +13,7 @@ const handleConfirmModify = () => {
   if (!params.questionnaireName) return  alert('问卷名称不能为空！')
   if (!params.questionnaireDescription) return  alert('问卷描述不能为空！')
   $.ajax({
-    url: 'http://127.0.0.1:8085/modifyQuestionnaireInfo',
+    url: API_BASE_URL + '/modifyQuestionnaireInfo',
     type: 'POST',
     data: JSON.stringify(params),
     dataType: 'json',

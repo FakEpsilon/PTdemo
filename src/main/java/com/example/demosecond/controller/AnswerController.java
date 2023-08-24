@@ -5,12 +5,10 @@ import com.example.demosecond.dao.entity.AnswerEntity;
 import com.example.demosecond.dao.entity.OptionEntity;
 import com.example.demosecond.service.AnswerService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
+@CrossOrigin(origins = "https://q.luckyf.cc")
 public class AnswerController {
     @Autowired
     private AnswerService answerService;

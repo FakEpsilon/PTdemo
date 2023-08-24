@@ -7,7 +7,7 @@
   <select id="queryProjectList" parameterType="java.lang.String" resultType="com.example.demosecond.dao.entity.ProjectEntity">
     SELECT id, user_id, project_name as "projectName", CREATION_DATE as "creationDate", created_by as "createdBy", PROJECT_CONTENT as "projectContent"
     FROM project_info
-    ORDER BY id
+    ORDER BY creation_date
   </select>
 
   <!--根据项目名查找项目信息-->

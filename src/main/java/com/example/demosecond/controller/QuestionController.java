@@ -13,7 +13,8 @@ import java.util.List;
 
 
 @RestController
-public class QuestionController<model> {
+@CrossOrigin(origins = "https://q.luckyf.cc")
+public class QuestionController {
     @Autowired
     private QuestionService questionService;
 

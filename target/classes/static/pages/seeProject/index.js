@@ -42,7 +42,7 @@ const fetchProjectInfo = (id) => {
       if(res.data === null){
         return
       }
-      console.log(res.data)
+      // console.log(res.data)
       res.data.map(item=>{
         let index = 1
         if(item.flag === "1"){
@@ -83,6 +83,7 @@ const onIssue = (id) => {
   let params = {
     id: id
   }
+  console.log(params)
   /*根据问卷ID查询该问卷flag*/
   $.ajax({
     url: API_BASE_URL + '/selectQuestionnaireInfo',
@@ -93,7 +94,6 @@ const onIssue = (id) => {
     success(res){
       console.log(res.data)
       if(res.data[0].flag === "1"){
-        console.log()
         alert("已经发布，请点击链接查看！")
       }else{
         issueQues(params)
@@ -116,7 +116,7 @@ const onIssue = (id) => {
       dataType: "json",
       contentType: "application/json",
       success(res){
-        console.log(param)
+        // console.log(param)
         $('#content').find('tr').slice(1).remove()
         alert("成功发布！")
         let projectId = $util.getPageParam('seeProject')
@@ -143,7 +143,7 @@ const onLink = (id, name, description, flag) => {/*这个it是问卷对象*///�
       let it = []
       it.push(name)
       it.push(description)
-      console.log(it)
+      // console.log(it)
       $util.setPageParam('answerSheetQuestions', res.data)//送问题列表
       $util.setPageParam('answerSheetQuestionnaire', it)//送问卷信息
       location.href = `../answerSheet/index.html?id=${id}`
